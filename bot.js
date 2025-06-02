@@ -10,7 +10,7 @@ const bot = new TelegramBot(token, { polling: true });
 
 // Basic /start command
 bot.onText(/\/start/, (msg) => {
-    bot.sendMessage(msg.chat.id, 'سلام روله');
+    bot.sendMessage(msg.chat.id, 'سلام بر گومبولی خوشمزه حالت چطوره');
 });
 
 // /help command
