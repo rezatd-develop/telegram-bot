@@ -1,0 +1,35 @@
+// bot.js
+const TelegramBot = require('node-telegram-bot-api');
+const Agent = require('socks5-https-client/lib/Agent');
+
+// Replace with your BotFather token
+const token = '8192918300:AAELExcLyKJDTcQHCPaYu3i0I9jWyhOdno0';
+
+// Create a bot using polling (for local use)
+const bot = new TelegramBot(token, {
+    polling: true, request: {
+        agentClass: Agent,
+        agentOptions: {
+            socksHost: '101.92.33.21',
+            socksPort: '80'
+        }
+    }
+});
+
+// Basic /start command
+bot.onText(/\/start/, (msg) => {
+    bot.sendMessage(msg.chat.id, 'Welcome! Send /help to see available commands.');
+});
+
+// /help command
+bot.onText(/\/help/, (msg) => {
+    bot.sendMessage(msg.chat.id, `Available commands:
+/start - Start the bot
+/help - Show this help message`);
+});
+
+// Example /echo command
+bot.onText(/\/echo (.+)/, (msg, match) => {
+    const resp = match[1];
+    bot.sendMessage(msg.chat.id, resp);
+});
