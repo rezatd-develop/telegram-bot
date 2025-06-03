@@ -1,27 +1,19 @@
-// bot.js
+require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
-const Agent = require('socks5-https-client/lib/Agent');
 
-// Replace with your BotFather token
-const token = '8192918300:AAELExcLyKJDTcQHCPaYu3i0I9jWyhOdno0';
-
-// Create a bot using polling (for local use)
+const token = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
-// Basic /start command
+// Handlers
+const { sendMainMenu } = require('./handlers/mainMenu');
+const handleCallbacks = require('./handlers/callbacks');
+
+// Start command
 bot.onText(/\/start/, (msg) => {
-    bot.sendMessage(msg.chat.id, 'سلام بر گومبولی خوشمزه حالت چطوره');
+  sendMainMenu(bot, msg.chat.id);
 });
 
-// /help command
-bot.onText(/\/help/, (msg) => {
-    bot.sendMessage(msg.chat.id, `Available commands:
-/start - Start the bot
-/help - Show this help message`);
-});
-
-// Example /echo command
-bot.onText(/\/echo (.+)/, (msg, match) => {
-    const resp = match[1];
-    bot.sendMessage(msg.chat.id, resp);
+// Callback queries (button presses)
+bot.on('callback_query', (query) => {
+  handleCallbacks(bot, query);
 });
